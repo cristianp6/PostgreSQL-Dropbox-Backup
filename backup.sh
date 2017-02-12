@@ -28,7 +28,7 @@
 #
 
 # Declaring some directories
-uploader_folder="/tmp/Dropbox-Uploader"
+uploader_folder="~/Dropbox-Uploader"
 uploader_file="$uploader_folder/dropbox_uploader.sh"
 dump_folder="/tmp/dbdump"
 
@@ -62,13 +62,13 @@ database="$(echo $url | grep / | cut -d/ -f2-)"
 mkdir -p $dump_folder
 
 # Filepath goes here (Dump may take a long time)
-filepath="$dump_folder/$(date +%s).dump"
+filepath="$dump_folder/${database}_bkup_$(date +%Y%m%d_%s).gz"
 
 # Now, dump all of that on to a temporary file.
-eval "PGPASSWORD=$password pg_dump -U $user $database > $filepath"
+eval "PGPASSWORD=$password pg_dump -U $user $database | gzip > $filepath"
 
 # Determine the destination
-DEST="/"
+DEST="/backups"
 if [ -n $DESTINATION ];
 then
    let DEST=$DESTINATION;
